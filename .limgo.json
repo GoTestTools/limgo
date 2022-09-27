@@ -1,0 +1,17 @@
+{
+	"coverageThreshold": {
+		"global": {
+			"statements": 0,
+			"functions": 0
+		},
+		"matcher": {
+			"pkg/coverage/line.go": {
+				"statements": 10,
+				"functions": 20
+			}
+		}
+	},
+	"excludes": [
+		"vendor/.*"
+	]
+}
