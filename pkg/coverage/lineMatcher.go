@@ -12,7 +12,7 @@ type LineMatcher struct {
 
 func NewLineMatcher() LineMatcher {
 	return LineMatcher{
-		expr: regexp.MustCompile(`(.+[^\/])\/(.+\.go):(\d+).(\d+),(\d+).(\d+)\s(\d+)\s([0,1])`),
+		expr: regexp.MustCompile(`(.+[^\/])\/(.+\.go):(\d+).(\d+),(\d+).(\d+)\s(\d+)\s(\d+)`),
 	}
 }
 

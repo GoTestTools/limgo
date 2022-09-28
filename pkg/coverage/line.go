@@ -41,8 +41,8 @@ func (line ParsedLine) NumberOfStatements() (int, error) {
 
 func (line ParsedLine) IsCovered() bool {
 	// 0 == statements have not been covered
-	// 1 == statements have been covered
-	return line[7] == "1"
+	// n > 0 == statements have been covered n times
+	return line[7] != "0"
 }
 
 func (line ParsedLine) MustLineFrom() int {
