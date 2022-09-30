@@ -1,4 +1,4 @@
 .vscode/
 
 limgo
-cov.out
+*.cov

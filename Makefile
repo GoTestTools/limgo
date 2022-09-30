@@ -1,8 +1,14 @@
-build:
+fmt:
+	gofmt -w .
+
+lint:
+	golangci-lint run
+
+build:	fmt lint
 	go build -o limgo cmd/main.go
 
-test:	build
-	go test ./... -coverprofile=cov.out -race
-	./limgo -covfile=cov.out -v=4
-	rm limgo cov.out
-	
+test: 
+	go test ./... -coverprofile=test.cov -race
+
+test-cov: test
+	./limgo -covfile=test.cov -v=2
