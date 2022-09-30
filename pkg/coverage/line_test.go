@@ -3,21 +3,21 @@ package coverage_test
 import (
 	"testing"
 
-	"github.com/engelmi/limgo/pkg/coverage"
+	"github.com/GoTestTools/limgo/pkg/coverage"
 )
 
-var validLine = coverage.ParsedLine{"github.com/engelmi/limgo", "line.go", "11", "5", "14", "58", "3", "1"}
-var invalidLine = coverage.ParsedLine{"github.com/engelmi/limgo", "line.go", "na", "na", "na", "na", "na", "1"}
+var validLine = coverage.ParsedLine{"github.com/GoTestTools/limgo", "line.go", "11", "5", "14", "58", "3", "1"}
+var invalidLine = coverage.ParsedLine{"github.com/GoTestTools/limgo", "line.go", "na", "na", "na", "na", "na", "1"}
 
 func TestParsedLine_Key(t *testing.T) {
-	expected := "github.com/engelmi/limgo/line.go"
+	expected := "github.com/GoTestTools/limgo/line.go"
 	if validLine.Key() != expected {
 		t.Fatalf("Expected line key to be '%s', but got '%s'", expected, validLine.Key())
 	}
 }
 
 func TestParsedLine_Package(t *testing.T) {
-	expected := "github.com/engelmi/limgo"
+	expected := "github.com/GoTestTools/limgo"
 	if validLine.PackageName() != expected {
 		t.Fatalf("Expected package to be '%s', but got '%s'", expected, validLine.PackageName())
 	}
@@ -94,17 +94,17 @@ func TestParsedLine_IsCovered(t *testing.T) {
 	}{
 		{
 			name:     "line is not covered",
-			line:     coverage.ParsedLine{"github.com/engelmi/limgo", "line.go", "11", "5", "14", "58", "3", "0"},
+			line:     coverage.ParsedLine{"github.com/GoTestTools/limgo", "line.go", "11", "5", "14", "58", "3", "0"},
 			expected: false,
 		},
 		{
 			name:     "line is covered once",
-			line:     coverage.ParsedLine{"github.com/engelmi/limgo", "line.go", "11", "5", "14", "58", "3", "1"},
+			line:     coverage.ParsedLine{"github.com/GoTestTools/limgo", "line.go", "11", "5", "14", "58", "3", "1"},
 			expected: true,
 		},
 		{
 			name:     "line is covered more than once",
-			line:     coverage.ParsedLine{"github.com/engelmi/limgo", "line.go", "11", "5", "14", "58", "3", "3"},
+			line:     coverage.ParsedLine{"github.com/GoTestTools/limgo", "line.go", "11", "5", "14", "58", "3", "3"},
 			expected: true,
 		},
 	}

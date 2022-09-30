@@ -3,9 +3,9 @@ package pkg
 import (
 	"regexp"
 
-	"github.com/engelmi/limgo/pkg/config"
-	"github.com/engelmi/limgo/pkg/coverage"
-	"github.com/engelmi/limgo/pkg/gosrc"
+	"github.com/GoTestTools/limgo/pkg/config"
+	"github.com/GoTestTools/limgo/pkg/coverage"
+	"github.com/GoTestTools/limgo/pkg/gosrc"
 )
 
 func GetCurrentModule() (*Module, error) {

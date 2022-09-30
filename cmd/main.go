@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/engelmi/limgo/pkg"
-	"github.com/engelmi/limgo/pkg/config"
-	"github.com/engelmi/limgo/pkg/coverage"
-	"github.com/engelmi/limgo/pkg/evaluation"
-	"github.com/engelmi/limgo/pkg/flags"
-	"github.com/engelmi/limgo/pkg/statistic"
+	"github.com/GoTestTools/limgo/pkg"
+	"github.com/GoTestTools/limgo/pkg/config"
+	"github.com/GoTestTools/limgo/pkg/coverage"
+	"github.com/GoTestTools/limgo/pkg/evaluation"
+	"github.com/GoTestTools/limgo/pkg/flags"
+	"github.com/GoTestTools/limgo/pkg/statistic"
 )
 
 func main() {

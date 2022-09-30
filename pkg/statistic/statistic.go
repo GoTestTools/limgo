@@ -3,7 +3,7 @@ package statistic
 import (
 	"io"
 
-	"github.com/engelmi/limgo/pkg"
+	"github.com/GoTestTools/limgo/pkg"
 )
 
 type CoverageStatistic struct {

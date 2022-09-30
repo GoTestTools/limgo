@@ -5,7 +5,7 @@ import (
 	"io"
 	"text/tabwriter"
 
-	"github.com/engelmi/limgo/pkg"
+	"github.com/GoTestTools/limgo/pkg"
 )
 
 func PrintPretty(output io.Writer, errs []CoverageError) {

@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/engelmi/limgo/pkg/config"
+	"github.com/GoTestTools/limgo/pkg/config"
 	"github.com/google/go-cmp/cmp"
 )
 

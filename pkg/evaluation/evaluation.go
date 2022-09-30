@@ -4,8 +4,8 @@ import (
 	"path"
 	"regexp"
 
-	"github.com/engelmi/limgo/pkg/config"
-	"github.com/engelmi/limgo/pkg/statistic"
+	"github.com/GoTestTools/limgo/pkg/config"
+	"github.com/GoTestTools/limgo/pkg/statistic"
 )
 
 func Evaluate(cs *statistic.CoverageStatistic, cfg config.CoverageConfig) (errs []CoverageError, err error) {
