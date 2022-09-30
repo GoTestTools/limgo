@@ -2,3 +2,4 @@
 
 limgo
 *.cov
+dist/
