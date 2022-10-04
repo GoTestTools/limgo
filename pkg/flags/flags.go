@@ -6,12 +6,14 @@ const Some string = "asdf"
 
 const (
 	FlagCovFile    string = "covfile"
+	FlagOutFile    string = "out"
 	FlagConfigFile string = "config"
 	FlagVerbosity  string = "v"
 )
 
 type Flags struct {
 	CoverageFile string
+	OutputFile   string
 	ConfigFile   string
 	Verbosity    uint
 }
@@ -23,6 +25,10 @@ func ParseFlags() Flags {
 
 	configFile := flag.String(FlagConfigFile, ".limgo.json",
 		`Coverage file. File name, including the path, of the coverage results from go test.`,
+	)
+
+	outFile := flag.String(FlagOutFile, "",
+		`Output file. Name of the file to write the coverage results to.`,
 	)
 
 	verbosity := flag.Uint(FlagVerbosity, 2,
@@ -39,6 +45,7 @@ func ParseFlags() Flags {
 
 	return Flags{
 		CoverageFile: *covFile,
+		OutputFile:   *outFile,
 		ConfigFile:   *configFile,
 		Verbosity:    *verbosity,
 	}

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"os"
 
 	"github.com/GoTestTools/limgo/pkg"
@@ -58,7 +59,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	covStatistic.Print(os.Stdout, cliFlags.Verbosity)
+	output := getOutput(cliFlags.OutputFile)
+	covStatistic.Print(output, cliFlags.Verbosity)
 
 	covErrs, err := evaluation.Evaluate(covStatistic, cfg)
 	if err != nil {
@@ -66,8 +68,21 @@ func main() {
 	}
 
 	if len(covErrs) != 0 {
-		evaluation.PrintPretty(os.Stdout, covErrs)
+		evaluation.PrintPretty(output, covErrs)
 		os.Exit(1)
 	}
 	os.Exit(0)
+}
+
+func getOutput(outFile string) io.Writer {
+	if outFile == "" {
+		return os.Stdout
+	}
+
+	file, err := os.Create(outFile)
+	if err != nil {
+		fmt.Printf("Failed creating/opening output file: %v\n", err)
+		return os.Stdout
+	}
+	return file
 }
