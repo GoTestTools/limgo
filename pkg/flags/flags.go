@@ -2,11 +2,9 @@ package flags
 
 import "flag"
 
-const Some string = "asdf"
-
 const (
-	FlagCovFile    string = "covfile"
-	FlagOutFile    string = "out"
+	FlagCoverFile  string = "coverfile"
+	FlagOutFile    string = "outfile"
 	FlagConfigFile string = "config"
 	FlagVerbosity  string = "v"
 )
@@ -19,16 +17,16 @@ type Flags struct {
 }
 
 func ParseFlags() Flags {
-	covFile := flag.String(FlagCovFile, "",
+	coverFile := flag.String(FlagCoverFile, "",
 		`Coverage file. Required. File name, including the path, of the coverage results from go test.`,
 	)
 
 	configFile := flag.String(FlagConfigFile, ".limgo.json",
-		`Coverage file. File name, including the path, of the coverage results from go test.`,
+		`Threshold configuration file. File name, including the path, of the coverage results from go test.`,
 	)
 
 	outFile := flag.String(FlagOutFile, "",
-		`Output file. Name of the file to write the coverage results to.`,
+		`Output file. Name of the file to write the coverage results to. If left blank, output will be printed to stdout.`,
 	)
 
 	verbosity := flag.Uint(FlagVerbosity, 2,
@@ -44,7 +42,7 @@ func ParseFlags() Flags {
 	flag.Parse()
 
 	return Flags{
-		CoverageFile: *covFile,
+		CoverageFile: *coverFile,
 		OutputFile:   *outFile,
 		ConfigFile:   *configFile,
 		Verbosity:    *verbosity,
