@@ -11,4 +11,4 @@ test:
 	go test ./... -coverprofile=test.cov -race
 
 test-cov: test
-	go run cmd/main.go -covfile=test.cov -v=2
+	go run cmd/main.go -coverfile=test.cov -v=2
