@@ -17,7 +17,7 @@ type Flags struct {
 }
 
 func ParseFlags() Flags {
-	coverFile := flag.String(FlagCoverFile, "",
+	coverFile := flag.String(FlagCoverFile, "coverage.tmp",
 		`Coverage file. Required. File name, including the path, of the coverage results from go test.`,
 	)
 

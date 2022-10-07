@@ -15,10 +15,6 @@ import (
 
 func main() {
 	cliFlags := flags.ParseFlags()
-	if cliFlags.CoverageFile == "" {
-		fmt.Printf("Missing argument -%s\n", flags.FlagCoverFile)
-		os.Exit(1)
-	}
 
 	covFile, err := os.Open(cliFlags.CoverageFile)
 	if err != nil {
