@@ -64,9 +64,9 @@ limgo -help
 
 ### The configuration file
 
-Coverage thresholds are defined in the configuration file. By default, `limgo` will search for a file named `.limgo.json`. This can be overridden by the `-config` flag. 
+Coverage thresholds are defined in a configuration file. By default, `limgo` will search for a file named `.limgo.json`. This can be overridden by the `-config` flag. 
 
-In the configuration file example below, thresholds are defined 
+Currently, coverage thresholds for `statements` and `functions` are supported. In the configuration file example below, thresholds are defined 
 - on a global (project) level
 - for all files in the "coverage" directory
 - for all files in the "gosrc" directory starting with g
@@ -117,19 +117,28 @@ jobs:
         with:
           go-version: 1.19
       
+      # Option 1: 
       # install using go install
-      - name: Set up limgo
+      - name: Set up limgo - option 1
         run: go install github.com/GoTestTools/limgo@latest
+      
+      # Option 2:
+      # install via GitHub Action
+      - name: Set up limgo - option 2
+        uses: GoTestTools/limgo-action@v1.0.0
+        with:
+          version: "v0.0.0-beta"
+          install-only: true
 
       # Run tests with coverprofile
       - name: Run tests
         run: |
           go test ./... -coverprofile=test.cov
       
-      # Use the coverprofile from the tests and apply the configured thresholds
+      # Pass the coverprofile to limgo for coverage evaluation
       - name: Check test coverage
         run: |
           limgo -covfile=test.cov -v=2
 ```
 
-
+The repository [limgo-action-example](https://github.com/GoTestTools/limgo-action-example) contains an example on how to use the `limgo` GitHub Action.  
