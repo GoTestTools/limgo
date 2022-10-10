@@ -2,6 +2,7 @@ package coverage
 
 import (
 	"fmt"
+	"math"
 	"strconv"
 	"strings"
 )
@@ -71,11 +72,13 @@ func (lines ParsedLines) CoveredStatementsPercent() float64 {
 	formattedPercentage := fmt.Sprintf("%.2f", percentage)
 
 	value, _ := strconv.ParseFloat(formattedPercentage, 64)
-	return value
+	return math.Floor(value*100) / 100
 }
 
 func (lines ParsedLines) UncoveredStatementsPercent() float64 {
-	return 100 - lines.CoveredStatementsPercent()
+	return math.Floor(
+		(100-lines.CoveredStatementsPercent())*100,
+	) / 100
 }
 
 func (lines ParsedLines) NumberOfLines() (int, int, int) {
@@ -125,9 +128,11 @@ func (lines ParsedLines) CoveredLinesPercent() float64 {
 	formattedPercentage := fmt.Sprintf("%.2f", percentage)
 
 	value, _ := strconv.ParseFloat(formattedPercentage, 64)
-	return value
+	return math.Floor(value*100) / 100
 }
 
 func (lines ParsedLines) UncoveredLinesPercent() float64 {
-	return 100 - lines.CoveredLinesPercent()
+	return math.Floor(
+		(100-lines.CoveredLinesPercent())*100,
+	) / 100
 }

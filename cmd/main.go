@@ -23,9 +23,9 @@ func main() {
 	}
 	defer covFile.Close()
 
-	pf, err := coverage.Parse(covFile)
-	if err != nil {
-		fmt.Printf("Failed to parse coverage file: %v\n", err)
+	pf := coverage.Parse(covFile)
+	if len(pf) == 0 {
+		fmt.Println("Empty test coverage file, aborting early")
 		os.Exit(1)
 	}
 

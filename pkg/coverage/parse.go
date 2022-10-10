@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func Parse(file io.Reader) (ParsedLines, error) {
+func Parse(file io.Reader) ParsedLines {
 	lineMatcher := NewLineMatcher()
 	parsedLines := ParsedLines{}
 
@@ -25,5 +25,5 @@ func Parse(file io.Reader) (ParsedLines, error) {
 		}
 	}
 
-	return parsedLines, nil
+	return parsedLines
 }

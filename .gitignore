@@ -1,5 +1,5 @@
 .vscode/
 
 limgo
-*.cov
 dist/
+test.cov
