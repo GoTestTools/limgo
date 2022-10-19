@@ -1,0 +1,14 @@
+package testdata
+
+import (
+	"fmt"
+)
+
+func main() {
+	defer func() {
+		fmt.Println("Deferred Hellow World")
+		if 1 == 1 {
+			fmt.Println("Definitely true in defer")
+		}
+	}()
+}

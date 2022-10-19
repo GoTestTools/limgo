@@ -1,0 +1,20 @@
+package testdata
+
+import (
+	"fmt"
+)
+
+func main() {
+	var c i = 1
+	switch t := c.(type) {
+	case int:
+		fmt.Println(t)
+		if 1 == 1 {
+			fmt.Println("definitely true")
+		}
+	case string:
+		fmt.Println(t)
+	default:
+		fmt.Println(t)
+	}
+}

@@ -1,0 +1,12 @@
+package testdata
+
+import (
+	"fmt"
+	"math/rand"
+)
+
+func main() {
+	if rand.Float32() < 0.5 {
+		fmt.Println("Hello from Otter Space")
+	}
+}

@@ -5,12 +5,9 @@ import (
 	"io"
 	"os"
 
-	"github.com/GoTestTools/limgo/pkg"
-	"github.com/GoTestTools/limgo/pkg/config"
-	"github.com/GoTestTools/limgo/pkg/coverage"
-	"github.com/GoTestTools/limgo/pkg/evaluation"
+	"github.com/GoTestTools/limgo/pkg/domain"
+	"github.com/GoTestTools/limgo/pkg/dto"
 	"github.com/GoTestTools/limgo/pkg/flags"
-	"github.com/GoTestTools/limgo/pkg/statistic"
 )
 
 func main() {
@@ -23,7 +20,7 @@ func main() {
 	}
 	defer covFile.Close()
 
-	pf := coverage.Parse(covFile)
+	pf := domain.ParseFile(covFile)
 	if len(pf) == 0 {
 		fmt.Println("Empty test coverage file, aborting early")
 		os.Exit(1)
@@ -36,35 +33,30 @@ func main() {
 	}
 	defer confFile.Close()
 
-	cfg, err := config.FromJSONString(confFile)
+	cfg, err := dto.FromJSONString(confFile)
 	if err != nil {
 		fmt.Printf("Failed to parse config: %v\n", err)
 		os.Exit(1)
 	}
 
-	module, err := pkg.GetCurrentModule()
+	module, err := domain.ParseModule(".", domain.AnalyzeModule)
 	if err != nil {
 		fmt.Printf("Failed to get go module: %v\n", err)
 		os.Exit(1)
 	}
-	module.WithCoverage(pf).WithConfig(cfg)
 
-	covStatistic, err := statistic.BuildCoverageStatistic(module)
-	if err != nil {
-		fmt.Printf("Failed to build coverage statistic: %v\n", err)
-		os.Exit(1)
-	}
+	covStatistic := domain.BuildStatementStatistic(module, pf)
 
-	output := getOutput(cliFlags.OutputFile)
-	covStatistic.Print(output, cliFlags.Verbosity)
+	printer := domain.NewPrinter(getOutput(cliFlags.OutputFile))
+	printer.PrintStatistic(*covStatistic, cliFlags.Verbosity)
 
-	covErrs, err := evaluation.Evaluate(covStatistic, cfg)
+	covErrs, err := domain.Evaluate(*covStatistic, cfg)
 	if err != nil {
 		fmt.Printf("Failed to apply configured thresholds: %v\n", err)
 	}
 
 	if len(covErrs) != 0 {
-		evaluation.PrintPretty(output, covErrs)
+		printer.PrintCoverageError(covErrs)
 		os.Exit(1)
 	}
 	os.Exit(0)

@@ -1,0 +1,12 @@
+package testdata
+
+import (
+	"fmt"
+)
+
+func main() {
+	values := []string{"Hello", "World", "!", " ", "<3"}
+	for _, value := range values {
+		fmt.Print(value)
+	}
+}

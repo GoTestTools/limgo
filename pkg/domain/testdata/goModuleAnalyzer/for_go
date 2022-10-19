@@ -1,0 +1,12 @@
+package testdata
+
+import (
+	"fmt"
+)
+
+func main() {
+	for i := 0; i < 10; i++ {
+		str := fmt.Sprintf("Hello World No. %d", i)
+		fmt.Println(str)
+	}
+}

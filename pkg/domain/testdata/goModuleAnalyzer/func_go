@@ -1,0 +1,16 @@
+package testdata
+
+import (
+	"fmt"
+)
+
+func main() {
+	f := func(d func(m string)) {
+		d("Hello World")
+	}
+	f(print)
+}
+
+func print(message string) {
+	fmt.Println(message)
+}

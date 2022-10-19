@@ -1,0 +1,27 @@
+package testdata
+
+import (
+	"fmt"
+	"math/rand"
+)
+
+func main() {
+	if rand.Float32() < 0.5 {
+		if rand.Float32() > 0.5 {
+			fmt.Println("Hello from Inner Space")
+		} else {
+			fmt.Println("Hello from Inner Else Space")
+			c := rand.Float32()
+			if c == 1.0 {
+				fmt.Println("Hello from this most unlikely Space")
+			} else if c > 0.8 {
+				fmt.Println("Hello from the 0.8 Space")
+			} else if c > 0.6 {
+				fmt.Println("Hello from the 0.6 Space")
+			} else {
+				fmt.Println("Hello from different Space")
+			}
+		}
+		fmt.Println("Hello from Otter Space")
+	}
+}
