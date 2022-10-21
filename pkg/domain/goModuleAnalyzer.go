@@ -199,6 +199,11 @@ func discoverSrcFiles(moduleRootDir string) (srcFiles []GoSrcFile, err error) {
 			return err
 		}
 
+		// skip vendored files
+		if strings.HasPrefix(relativePath, "vendor/") {
+			return nil
+		}
+
 		if !info.IsDir() && isGoSourceFile(relativePath) {
 			srcFiles = append(srcFiles, GoSrcFile{
 				Name: info.Name(),
