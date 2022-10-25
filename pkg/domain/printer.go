@@ -3,6 +3,7 @@ package domain
 import (
 	"fmt"
 	"io"
+	"sort"
 	"text/tabwriter"
 
 	"github.com/GoTestTools/limgo/pkg/model/evaluation"
@@ -90,16 +91,22 @@ func (p printer) printDirectoryCoverage(w *tabwriter.Writer, stats []statistic.D
 
 func (p printer) printFileCoverage(w *tabwriter.Writer, stats []statistic.FileStatistic, verbosity uint) {
 	for _, fileStat := range stats {
+		if verbosity > 3 {
+			fmt.Fprintf(w, "    %s\t%s\t%s\t%s\t%v\n",
+				fileStat.Name, "", "", "", "")
+			p.printFuncCoverage(w, fileStat.FunctionStatistics, verbosity)
+
+			continue
+		}
+
+		uncoveredLines := fileStat.GetUncoveredLines()
+		sort.Ints(uncoveredLines)
 		fmt.Fprintf(w, "    %s\t%s\t%s\t%s\t%v\n",
 			fileStat.Name,
 			fmtPercentage(fileStat.GetStmtCoverage()),
 			fmtPercentage(fileStat.GetLinesCoverage()),
 			fmtPercentage(fileStat.GetBranchesCoverage()),
-			"")
-
-		if verbosity > 3 {
-			p.printFuncCoverage(w, fileStat.FunctionStatistics, verbosity)
-		}
+			uncoveredLines)
 	}
 }
 
@@ -108,12 +115,17 @@ func (p printer) printFuncCoverage(w *tabwriter.Writer, stats []statistic.Functi
 		if funcStat.Name == "GenDecl" {
 			continue
 		}
+
+		uncoveredLines := funcStat.Lines.GetUncoveredLines()
+		sort.Ints(uncoveredLines)
+
 		fmt.Fprintf(w, "      func %s\t%s\t%s\t%s\t%v\n",
 			funcStat.Name,
 			fmtPercentage(funcStat.GetStmtCoverage()),
 			fmtPercentage(funcStat.GetLinesCoverage()),
 			fmtPercentage(funcStat.GetBranchesCoverage()),
-			"")
+			uncoveredLines,
+		)
 	}
 }
 
