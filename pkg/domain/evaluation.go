@@ -2,6 +2,7 @@ package domain
 
 import (
 	"fmt"
+	"path"
 	"regexp"
 
 	"github.com/GoTestTools/limgo/pkg/dto"
@@ -56,12 +57,13 @@ func Evaluate(moduleStatistic statistic.ModuleStatistic, cfg dto.CoverageConfig)
 			filteredFiles := moduleStatistic.FilterFileStatistics(regexMap[matcher])
 
 			for _, filteredFile := range filteredFiles {
+				filePath := path.Join(filteredFile.Directory, filteredFile.Name)
 
 				stmtCoverage := filteredFile.GetStmtCoverage()
 				if threshold.Statements > stmtCoverage {
 					errs = append(errs, evaluation.CoverageError{
 						Type:              evaluation.CoverageErrorStmt,
-						AffectedFile:      filteredFile.Name,
+						AffectedFile:      filePath,
 						ExpectedThreshold: threshold.Statements,
 						ActualCovered:     stmtCoverage,
 					})
@@ -71,7 +73,7 @@ func Evaluate(moduleStatistic statistic.ModuleStatistic, cfg dto.CoverageConfig)
 				if threshold.Lines > gblLineCoverage {
 					errs = append(errs, evaluation.CoverageError{
 						Type:              evaluation.CoverageErrorLines,
-						AffectedFile:      filteredFile.Name,
+						AffectedFile:      filePath,
 						ExpectedThreshold: threshold.Lines,
 						ActualCovered:     gblLineCoverage,
 					})
@@ -81,7 +83,7 @@ func Evaluate(moduleStatistic statistic.ModuleStatistic, cfg dto.CoverageConfig)
 				if threshold.Lines > gblBranchesCoverage {
 					errs = append(errs, evaluation.CoverageError{
 						Type:              evaluation.CoverageErrorBranches,
-						AffectedFile:      filteredFile.Name,
+						AffectedFile:      filePath,
 						ExpectedThreshold: threshold.Branches,
 						ActualCovered:     gblBranchesCoverage,
 					})
