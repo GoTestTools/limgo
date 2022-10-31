@@ -7,7 +7,7 @@ type StatementSummary struct {
 	CountCovered int
 }
 
-// Line key: line number, value: is covered
+// Line key: line number, value: is covered.
 type LineSummary map[int]bool
 
 func (ls LineSummary) GetLinesTotal() int {
@@ -33,7 +33,7 @@ func (ls LineSummary) GetUncoveredLines() (uncovered []int) {
 	return uncovered
 }
 
-// 1. Key: line number from, 2. Key: line number to, value: is covered
+// 1. Key: line number from, 2. Key: line number to, value: is covered.
 type BranchSummary map[int]map[int]bool
 
 func (bs BranchSummary) GetBranchesTotal() (total int) {

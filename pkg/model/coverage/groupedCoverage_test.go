@@ -7,6 +7,7 @@ import (
 	"github.com/GoTestTools/limgo/pkg/model/gosrc"
 )
 
+//nolint:funlen
 func TestIsCovered(t *testing.T) {
 
 	groupedCoverage := coverage.GroupedCoverage{}

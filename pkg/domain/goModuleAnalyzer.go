@@ -22,7 +22,7 @@ var AnalyzeModule = func(rootDir string) (analyzedFiles []gosrc.AnalyzedFile, er
 	}
 
 	for _, goSrcFile := range srcFiles {
-		functions, err := exploreFunctions(goSrcFile.Path)
+		functions, err := ExploreFunctions(goSrcFile.Path)
 		if err != nil {
 			return nil, errors.New(fmt.Errorf("failed opening '%s': %w", goSrcFile, err))
 		}
@@ -35,7 +35,7 @@ var AnalyzeModule = func(rootDir string) (analyzedFiles []gosrc.AnalyzedFile, er
 	return analyzedFiles, nil
 }
 
-func exploreFunctions(filePath string) (functions []gosrc.Function, err error) {
+func ExploreFunctions(filePath string) (functions []gosrc.Function, err error) {
 	fs := token.NewFileSet()
 	f, err := parser.ParseFile(fs, filePath, nil, parser.AllErrors)
 	if err != nil {
@@ -98,6 +98,7 @@ func exploreFunction(toExplore *ast.FuncDecl, fs *token.FileSet) gosrc.Function 
 	return function
 }
 
+//nolint:funlen,gocognit
 func exploreStatement(toExplore ast.Stmt, parent *gosrc.Statement, fs *token.FileSet) gosrc.Statement {
 	s := gosrc.NewStatement(toExplore, parent, fs)
 

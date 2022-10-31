@@ -12,10 +12,12 @@ import (
 type ModuleParser func(string, ModuleAnalyzer) (module.Module, error)
 
 var ParseModule = func(rootDir string, srcAnalyzer ModuleAnalyzer) (module.Module, error) {
+	//nolint:gosec
 	gomodFile, err := os.Open(path.Join(rootDir, "go.mod"))
 	if err != nil {
 		return module.Module{}, errors.New(fmt.Errorf("failed opening go.mod: %w", err))
 	}
+	//nolint:errcheck,gosec
 	defer gomodFile.Close()
 
 	gomod, err := ParseGoMod(gomodFile)

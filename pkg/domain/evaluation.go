@@ -12,48 +12,62 @@ import (
 )
 
 func Evaluate(moduleStatistic statistic.ModuleStatistic, cfg dto.CoverageConfig) (errs []evaluation.CoverageError, err error) {
-	if cfg.Global != nil {
+	errs = append(errs, evaluateGlobal(moduleStatistic, cfg.Global)...)
+
+	matcherErrs, err := evaluateMatcher(moduleStatistic, cfg.Matcher)
+	if err != nil {
+		return nil, err
+	}
+	errs = append(errs, matcherErrs...)
+
+	return errs, nil
+}
+
+func evaluateGlobal(moduleStatistic statistic.ModuleStatistic, glblCfg *dto.Threshold) (errs []evaluation.CoverageError) {
+	if glblCfg != nil {
 
 		gblStmtCoverage := moduleStatistic.GetStmtCoverage()
-		if cfg.Global.Statements > gblStmtCoverage {
+		if glblCfg.Statements > gblStmtCoverage {
 			errs = append(errs, evaluation.CoverageError{
 				Type:              evaluation.CoverageErrorStmt,
 				AffectedFile:      moduleStatistic.Name,
-				ExpectedThreshold: cfg.Global.Statements,
+				ExpectedThreshold: glblCfg.Statements,
 				ActualCovered:     gblStmtCoverage,
 			})
 		}
 
 		gblLineCoverage := moduleStatistic.GetStmtCoverage()
-		if cfg.Global.Lines > gblLineCoverage {
+		if glblCfg.Lines > gblLineCoverage {
 			errs = append(errs, evaluation.CoverageError{
 				Type:              evaluation.CoverageErrorLines,
 				AffectedFile:      moduleStatistic.Name,
-				ExpectedThreshold: cfg.Global.Lines,
+				ExpectedThreshold: glblCfg.Lines,
 				ActualCovered:     gblLineCoverage,
 			})
 		}
 
 		gblBranchesCoverage := moduleStatistic.GetBranchesCoverage()
-		if cfg.Global.Lines > gblBranchesCoverage {
+		if glblCfg.Lines > gblBranchesCoverage {
 			errs = append(errs, evaluation.CoverageError{
 				Type:              evaluation.CoverageErrorBranches,
 				AffectedFile:      moduleStatistic.Name,
-				ExpectedThreshold: cfg.Global.Branches,
+				ExpectedThreshold: glblCfg.Branches,
 				ActualCovered:     gblBranchesCoverage,
 			})
 		}
-
-		// TODO: function coverage
 	}
 
-	if cfg.Matcher != nil {
-		regexMap, err := compileMatcherRegex(cfg)
+	return errs
+}
+
+func evaluateMatcher(moduleStatistic statistic.ModuleStatistic, matcherCfg *dto.Matcher) (errs []evaluation.CoverageError, err error) {
+	if matcherCfg != nil {
+		regexMap, err := compileMatcherRegex(matcherCfg)
 		if err != nil {
 			return nil, err
 		}
 
-		for matcher, threshold := range *cfg.Matcher {
+		for matcher, threshold := range *matcherCfg {
 			filteredFiles := moduleStatistic.FilterFileStatistics(regexMap[matcher])
 
 			for _, filteredFile := range filteredFiles {
@@ -95,9 +109,9 @@ func Evaluate(moduleStatistic statistic.ModuleStatistic, cfg dto.CoverageConfig)
 	return errs, nil
 }
 
-func compileMatcherRegex(cfg dto.CoverageConfig) (map[string]*regexp.Regexp, error) {
+func compileMatcherRegex(matcherCfg *dto.Matcher) (map[string]*regexp.Regexp, error) {
 	regexMap := map[string]*regexp.Regexp{}
-	for matcher := range *cfg.Matcher {
+	for matcher := range *matcherCfg {
 		r, err := regexp.Compile(matcher)
 		if err != nil {
 			return nil, errors.New(fmt.Errorf("failed to compile regex '%s': %w", matcher, err))

@@ -45,6 +45,7 @@ func (p printer) PrintCoverageError(errs []evaluation.CoverageError) {
 
 	}
 
+	//nolint:errcheck,gosec
 	w.Flush()
 }
 
@@ -60,6 +61,7 @@ func (p printer) PrintStatistic(stats statistic.ModuleStatistic, verbosity uint)
 		p.printDirectoryCoverage(w, stats.GetDirectoryStatistics(), verbosity)
 	}
 
+	//nolint:errcheck,gosec
 	w.Flush()
 }
 
@@ -93,7 +95,7 @@ func (p printer) printFileCoverage(w *tabwriter.Writer, stats []statistic.FileSt
 		if verbosity > 3 {
 			fmt.Fprintf(w, "    %s\t%s\t%s\t%s\t%v\n",
 				fileStat.Name, "", "", "", "")
-			p.printFuncCoverage(w, fileStat.FunctionStatistics, verbosity)
+			p.printFuncCoverage(w, fileStat.FunctionStatistics)
 
 			continue
 		}
@@ -108,7 +110,7 @@ func (p printer) printFileCoverage(w *tabwriter.Writer, stats []statistic.FileSt
 	}
 }
 
-func (p printer) printFuncCoverage(w *tabwriter.Writer, stats []statistic.FunctionStatistic, verbosity uint) {
+func (p printer) printFuncCoverage(w *tabwriter.Writer, stats []statistic.FunctionStatistic) {
 	for _, funcStat := range stats {
 		if funcStat.Name == "GenDecl" {
 			continue

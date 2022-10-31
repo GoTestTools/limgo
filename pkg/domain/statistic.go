@@ -52,12 +52,12 @@ func BuildStatementStatistic(module module.Module, parsedCoverage coverage.Cover
 }
 
 func handleCoverage(functionStats *statistic.FunctionStatistic, stmt gosrc.Statement, isCovered bool) {
-	handleStatement(functionStats, stmt, isCovered)
+	handleStatement(functionStats, isCovered)
 	handleLines(functionStats, stmt, isCovered)
 	handleBranch(functionStats, stmt, isCovered)
 }
 
-func handleStatement(functionStats *statistic.FunctionStatistic, stmt gosrc.Statement, isCovered bool) {
+func handleStatement(functionStats *statistic.FunctionStatistic, isCovered bool) {
 	functionStats.Stmts.Total += 1
 	if isCovered {
 		functionStats.Stmts.CountCovered += 1

@@ -18,11 +18,13 @@ func main() {
 		fmt.Printf("Failed to open coverage file: %v\n", err)
 		os.Exit(1)
 	}
+	//nolint:errcheck,gosec
 	defer covFile.Close()
 
 	pf := domain.ParseFile(covFile)
 	if len(pf) == 0 {
 		fmt.Println("Empty test coverage file, aborting early")
+		//nolint:gocritic
 		os.Exit(1)
 	}
 
@@ -31,6 +33,7 @@ func main() {
 		fmt.Printf("Failed to open config: %v\n", err)
 		os.Exit(1)
 	}
+	//nolint:errcheck,gosec
 	defer confFile.Close()
 
 	cfg, err := dto.FromJSONString(confFile)
@@ -67,6 +70,7 @@ func getOutput(outFile string) io.Writer {
 		return os.Stdout
 	}
 
+	//nolint:gosec
 	file, err := os.Create(outFile)
 	if err != nil {
 		fmt.Printf("Failed creating/opening output file: %v\n", err)

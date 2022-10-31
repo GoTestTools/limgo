@@ -43,6 +43,7 @@ func TestParse(t *testing.T) {
 			if err != nil {
 				t.Fatalf("Unexpected error happened while opening coverage file: %v", err)
 			}
+			//nolint:errcheck,gosec
 			defer file.Close()
 
 			got := len(domain.ParseFile(file))

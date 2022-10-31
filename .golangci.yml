@@ -1,0 +1,52 @@
+run:
+  timeout: 5m
+linters:
+  enable:
+    - depguard
+    - gomoddirectives
+    - nolintlint
+    - gosec
+    # - revive
+    - nestif
+    - nakedret
+    - gocritic
+    - godot
+    - godox
+    - gocyclo
+    - gocognit
+    - goconst
+    - unconvert
+    - unparam
+    - asciicheck
+    - bodyclose
+    - dupl
+    - exportloopref
+    - funlen
+    - dogsled
+    - importas
+    - gci
+    - gofmt
+    - nilerr
+    - errorlint
+    - prealloc
+    - durationcheck
+    - testpackage
+linters-settings:
+  depguard:
+    list-type: whitelist
+    include-go-root: false
+    packages:
+      - github.com/GoTestTools/limgo
+      - github.com/go-errors/errors
+      - github.com/google/go-cmp/cmp
+  govet:
+    enable-all: true
+    check-shadowing: false
+    disable:
+      - fieldalignment
+      - shadow
+  stylecheck:
+    checks:
+      - all
+issues:
+  exclude-use-default: false
