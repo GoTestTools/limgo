@@ -1,6 +1,8 @@
 package gosrc
 
-import "strings"
+import (
+	"strings"
+)
 
 type AnalyzedFile struct {
 	FileName  string
