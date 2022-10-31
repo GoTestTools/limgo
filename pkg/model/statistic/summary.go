@@ -40,7 +40,7 @@ func (bs BranchSummary) GetBranchesTotal() (total int) {
 	for _, to := range bs {
 		total += len(to)
 	}
-	return len(bs)
+	return total
 }
 
 func (bs BranchSummary) GetBranchesCovered() (covered int) {
