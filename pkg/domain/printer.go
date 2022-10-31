@@ -3,7 +3,6 @@ package domain
 import (
 	"fmt"
 	"io"
-	"sort"
 	"text/tabwriter"
 
 	"github.com/GoTestTools/limgo/pkg/model/evaluation"
@@ -100,7 +99,6 @@ func (p printer) printFileCoverage(w *tabwriter.Writer, stats []statistic.FileSt
 		}
 
 		uncoveredLines := fileStat.GetUncoveredLines()
-		sort.Ints(uncoveredLines)
 		fmt.Fprintf(w, "    %s\t%s\t%s\t%s\t%v\n",
 			fileStat.Name,
 			fmtPercentage(fileStat.GetStmtCoverage()),
@@ -117,8 +115,6 @@ func (p printer) printFuncCoverage(w *tabwriter.Writer, stats []statistic.Functi
 		}
 
 		uncoveredLines := funcStat.Lines.GetUncoveredLines()
-		sort.Ints(uncoveredLines)
-
 		fmt.Fprintf(w, "      func %s\t%s\t%s\t%s\t%v\n",
 			funcStat.Name,
 			fmtPercentage(funcStat.GetStmtCoverage()),

@@ -1,5 +1,7 @@
 package statistic
 
+import "sort"
+
 type StatementSummary struct {
 	Total        int
 	CountCovered int
@@ -27,6 +29,7 @@ func (ls LineSummary) GetUncoveredLines() (uncovered []int) {
 			uncovered = append(uncovered, lineNo)
 		}
 	}
+	sort.Ints(uncovered)
 	return uncovered
 }
 
