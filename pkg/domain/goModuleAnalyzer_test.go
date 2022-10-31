@@ -1,14 +1,16 @@
-package domain
+package domain_test
 
 import (
 	"path"
 	"testing"
 
+	"github.com/GoTestTools/limgo/pkg/domain"
 	"github.com/GoTestTools/limgo/pkg/model/gosrc"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 )
 
+//nolint:dupl,funlen
 func TestExploreFunctions(t *testing.T) {
 
 	testcases := []struct {
@@ -454,7 +456,7 @@ func TestExploreFunctions(t *testing.T) {
 	for _, testcase := range testcases {
 		t.Run(testcase.name, func(t *testing.T) {
 			filePath := path.Join("./testdata", "goModuleAnalyzer", testcase.file)
-			funcs, err := exploreFunctions(filePath)
+			funcs, err := domain.ExploreFunctions(filePath)
 
 			if err != nil && !testcase.expectErr {
 				t.Fatalf("Unexpected error occurred while analyzing file %s: %v", filePath, err)
