@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"sort"
 	"strings"
 
 	"github.com/GoTestTools/limgo/pkg/model/coverage"
@@ -88,6 +89,9 @@ func buildDirectoryStatistic(fileStatsPerDir map[string]statistic.FilesStatistic
 			FileStatistics: fileStatistics,
 		})
 	}
+	sort.Slice(directoryStatistic, func(i, j int) bool {
+		return directoryStatistic[i].Name < directoryStatistic[j].Name
+	})
 	return directoryStatistic
 }
 
