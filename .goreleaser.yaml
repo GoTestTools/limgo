@@ -9,7 +9,7 @@ builds:
       - linux
       - windows
       - darwin
-    main: ./cmd/
+    main: ./cmd/limgo/
 archives:
   - replacements:
       darwin: Darwin
