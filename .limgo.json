@@ -1,5 +1,5 @@
 {
-	"coverageThreshold": {
+	"coverage": {
 		"global": {
 			"statements": 25,
 			"lines": 25,
@@ -13,6 +13,14 @@
 				"branches": 90,
 				"functions": 20
 			}
-		}
+		},
+		"excludes": [
+			"vendor/.*"
+		]
+	},
+	"statistic": {
+		"excludes": [
+			"vendor/.*"
+		]
 	}
 }
