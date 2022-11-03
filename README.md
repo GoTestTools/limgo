@@ -31,7 +31,7 @@ The `limgo` binary can be downloaded manually from the [releases section](https:
 
 The `limgo` binary can be installed using `go install`:
 ```bash
-go install github.com/GoTestTools/limgo@latest
+go install github.com/GoTestTools/limgo/cmd/limgo@latest
 ```
 
 ### Building from source
@@ -69,16 +69,24 @@ limgo -help
 
 ### The configuration file
 
-Coverage thresholds are defined in a configuration file. By default, `limgo` will search for a file named `.limgo.json`. This can be overridden by the `-config` flag. 
+Coverage thresholds as well as statistic configuration can be defined in a configuration file. By default, `limgo` will search for a file named `.limgo.json`. This can be overridden by the `-config` flag. 
 
-Currently, coverage thresholds for `statements`, `lines` and `branches` are supported. In the configuration file example below, thresholds are defined 
+To get started, the most basic configuration - an empty json - can be used:
+```json
+{}
+```
+`limgo` will, by default, always exclude the vendor directory from the statistic as well as the coverage threshold evaluation. 
+
+Coverage thresholds can be defined for `statements`, `lines` and `branches`. In the example below, thresholds are defined 
 - on a global (project) level
 - for all files in the "coverage" directory
-- for all files in the "gosrc" directory starting with g
+- for all files in the "gosrc" directory starting with "g"
+
+Also, the dto directory is excluded from the statistc as well as from the coverage evaluation. 
 ```json
 {
-"coverageThreshold": {
-    "global": {
+	"coverage": {
+		"global": {
         "statements": 50,
         "lines": 55,
 			  "branches": 33
@@ -96,16 +104,22 @@ Currently, coverage thresholds for `statements`, `lines` and `branches` are supp
         }
     },
     "excludes": [
-        "vendor/.*"
-    ]
+			"dto/.*"
+		]
+	},
+	"statistic": {
+		"excludes": [
+			"dto/.*"
+		]
+	}
 }
 ```
 
-Every matchers key is parsed as a regular expression and it's threshold is applied to all the files that match it. Within the `excludes` array directories and files can be excluded - this overrides any matches. 
+Every matchers key is parsed as a [regular expression](https://pkg.go.dev/regexp) and it's threshold is applied to all the files that match it. Within the `excludes` array directories and files can be excluded - this overrides any matches. 
 
 ## Setup in a CI system
 
-As `limgo` is a simple binary, it is easy to set it up in any CI system. The following snippet shows an Github Action example: 
+As `limgo` is a simple binary, it is easy to set it up in any CI system. The following snippet shows an [Github Action](https://github.com/features/actions) example: 
 
 ```yaml
 jobs:
@@ -135,7 +149,7 @@ jobs:
       - name: Set up limgo - option 2
         uses: GoTestTools/limgo-action@v1.0.1
         with:
-          version: "v0.0.2-beta"
+          version: "v0.0.3-beta"
           install-only: true
 
       # Run tests with coverprofile
