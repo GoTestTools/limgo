@@ -5,12 +5,13 @@ import (
 	"io"
 	"os"
 
+	"github.com/GoTestTools/limgo/cmd/flags"
 	"github.com/GoTestTools/limgo/pkg/domain"
 	"github.com/GoTestTools/limgo/pkg/dto"
 )
 
 func main() {
-	cliFlags := ParseFlags()
+	cliFlags := flags.ParseFlags()
 
 	covFile, err := os.Open(cliFlags.CoverageFile)
 	if err != nil {
@@ -41,7 +42,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	module, err := domain.ParseModule(".", domain.AnalyzeModule)
+	module, err := domain.ParseModule(".", domain.NewModuleAnalyzer(cfg.StatisticConfig.Excludes))
 	if err != nil {
 		fmt.Printf("Failed to get go module: %v\n", err)
 		os.Exit(1)
@@ -52,7 +53,7 @@ func main() {
 	printer := domain.NewPrinter(getOutput(cliFlags.OutputFile))
 	printer.PrintStatistic(*covStatistic, cliFlags.Verbosity)
 
-	covErrs, err := domain.Evaluate(*covStatistic, cfg)
+	covErrs, err := domain.Evaluate(*covStatistic, cfg.CoverageConfig)
 	if err != nil {
 		fmt.Printf("Failed to apply configured thresholds: %v\n", err)
 	}

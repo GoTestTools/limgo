@@ -10,8 +10,8 @@ import (
 )
 
 func TestToJSON_Succeeds(t *testing.T) {
-	cfg := dto.CoverageConfig{
-		CoverageThreshold: dto.CoverageThreshold{
+	cfg := dto.LimgoConfig{
+		CoverageConfig: dto.CoverageConfig{
 			Global: &dto.Threshold{
 				Statements: 100,
 				Functions:  100,
@@ -22,8 +22,11 @@ func TestToJSON_Succeeds(t *testing.T) {
 					Functions:  20,
 				},
 			},
+			Excludes: []string{"vendor/.*"},
 		},
-		Excludes: []string{"vendor/.*"},
+		StatisticConfig: dto.StatisticConfig{
+			Excludes: []string{"vendor/.*"},
+		},
 	}
 
 	cfgBuffer := &bytes.Buffer{}
@@ -33,7 +36,7 @@ func TestToJSON_Succeeds(t *testing.T) {
 	}
 
 	expectedRawCfg := `{
-	"coverageThreshold": {
+	"coverage": {
 		"global": {
 			"statements": 100,
 			"lines": 0,
@@ -47,11 +50,47 @@ func TestToJSON_Succeeds(t *testing.T) {
 				"branches": 0,
 				"functions": 20
 			}
-		}
+		},
+		"excludes": [
+			"vendor/.*"
+		]
 	},
-	"excludes": [
-		"vendor/.*"
-	]
+	"statistic": {
+		"excludes": [
+			"vendor/.*"
+		]
+	}
+}
+`
+
+	if diff := cmp.Diff(expectedRawCfg, cfgBuffer.String()); diff != "" {
+		t.Fatalf("Detected difference in parsed config: %s", diff)
+	}
+}
+
+func TestToJSON_SucceedsSetsDefaults(t *testing.T) {
+	cfg := dto.LimgoConfig{
+		CoverageConfig:  dto.CoverageConfig{},
+		StatisticConfig: dto.StatisticConfig{},
+	}
+
+	cfgBuffer := &bytes.Buffer{}
+	err := cfg.ToJSON(cfgBuffer)
+	if err != nil {
+		t.Fatalf("Unexpected error writing config struct to string: %v", err)
+	}
+
+	expectedRawCfg := `{
+	"coverage": {
+		"excludes": [
+			"vendor/.*"
+		]
+	},
+	"statistic": {
+		"excludes": [
+			"vendor/.*"
+		]
+	}
 }
 `
 
@@ -61,33 +100,41 @@ func TestToJSON_Succeeds(t *testing.T) {
 }
 
 func TestFromJSONString_Succeeds(t *testing.T) {
-	rawCfg := `
-	{
-		"coverageThreshold": {
-			"global": {
-				"statements": 100,
-				"functions": 100
-			},
-			"matcher": {
-				"pkg/coverage/line.go": {
-					"statements": 10,
-					"functions": 20
-				}
+	rawCfg := `{
+	"coverage": {
+		"global": {
+			"statements": 100,
+			"lines": 0,
+			"branches": 0,
+			"functions": 100
+		},
+		"matcher": {
+			"pkg/coverage/line.go": {
+				"statements": 10,
+				"lines": 0,
+				"branches": 0,
+				"functions": 20
 			}
 		},
 		"excludes": [
 			"vendor/.*"
 		]
+	},
+	"statistic": {
+		"excludes": [
+			"vendor/.*"
+		]
 	}
-	`
+}
+`
 
 	parsedCfg, err := dto.FromJSONString(strings.NewReader(rawCfg))
 	if err != nil {
 		t.Fatalf("Unexpected error parsing config string to struct: %v", err)
 	}
 
-	expectedCfg := dto.CoverageConfig{
-		CoverageThreshold: dto.CoverageThreshold{
+	expectedCfg := dto.LimgoConfig{
+		CoverageConfig: dto.CoverageConfig{
 			Global: &dto.Threshold{
 				Statements: 100,
 				Functions:  100,
@@ -98,8 +145,33 @@ func TestFromJSONString_Succeeds(t *testing.T) {
 					Functions:  20,
 				},
 			},
+			Excludes: []string{"vendor/.*"},
 		},
-		Excludes: []string{"vendor/.*"},
+		StatisticConfig: dto.StatisticConfig{
+			Excludes: []string{"vendor/.*"},
+		},
+	}
+
+	if diff := cmp.Diff(expectedCfg, parsedCfg); diff != "" {
+		t.Fatalf("Detected difference in parsed config: %s", diff)
+	}
+}
+
+func TestFromJSONString_SucceedsSetsDefaults(t *testing.T) {
+	rawCfg := `{}`
+
+	parsedCfg, err := dto.FromJSONString(strings.NewReader(rawCfg))
+	if err != nil {
+		t.Fatalf("Unexpected error parsing config string to struct: %v", err)
+	}
+
+	expectedCfg := dto.LimgoConfig{
+		CoverageConfig: dto.CoverageConfig{
+			Excludes: []string{"vendor/.*"},
+		},
+		StatisticConfig: dto.StatisticConfig{
+			Excludes: []string{"vendor/.*"},
+		},
 	}
 
 	if diff := cmp.Diff(expectedCfg, parsedCfg); diff != "" {

@@ -25,7 +25,7 @@ var ParseModule = func(rootDir string, srcAnalyzer ModuleAnalyzer) (module.Modul
 		return module.Module{}, err
 	}
 
-	analyzedFiles, err := AnalyzeModule(rootDir)
+	analyzedFiles, err := srcAnalyzer(rootDir)
 	if err != nil {
 		return module.Module{}, err
 	}

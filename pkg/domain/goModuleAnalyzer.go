@@ -7,6 +7,7 @@ import (
 	"go/token"
 	"io/fs"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	"github.com/GoTestTools/limgo/pkg/model/gosrc"
@@ -15,24 +16,31 @@ import (
 
 type ModuleAnalyzer func(string) ([]gosrc.AnalyzedFile, error)
 
-var AnalyzeModule = func(rootDir string) (analyzedFiles []gosrc.AnalyzedFile, err error) {
-	srcFiles, err := discoverSrcFiles(rootDir)
-	if err != nil {
-		return nil, err
-	}
-
-	for _, goSrcFile := range srcFiles {
-		functions, err := ExploreFunctions(goSrcFile.Path)
+func NewModuleAnalyzer(excludes []string) ModuleAnalyzer {
+	return func(rootDir string) (analyzedFiles []gosrc.AnalyzedFile, err error) {
+		excludeRegex, err := buildRegex(excludes)
 		if err != nil {
-			return nil, errors.New(fmt.Errorf("failed opening '%s': %w", goSrcFile, err))
+			return nil, err
 		}
-		analyzedFiles = append(analyzedFiles, gosrc.AnalyzedFile{
-			FileName:  goSrcFile.Name,
-			FilePath:  goSrcFile.Path,
-			Functions: functions,
-		})
+
+		srcFiles, err := discoverSrcFiles(rootDir, excludeRegex)
+		if err != nil {
+			return nil, err
+		}
+
+		for _, goSrcFile := range srcFiles {
+			functions, err := ExploreFunctions(goSrcFile.Path)
+			if err != nil {
+				return nil, errors.New(fmt.Errorf("failed opening '%s': %w", goSrcFile, err))
+			}
+			analyzedFiles = append(analyzedFiles, gosrc.AnalyzedFile{
+				FileName:  goSrcFile.Name,
+				FilePath:  goSrcFile.Path,
+				Functions: functions,
+			})
+		}
+		return analyzedFiles, nil
 	}
-	return analyzedFiles, nil
 }
 
 func ExploreFunctions(filePath string) (functions []gosrc.Function, err error) {
@@ -194,15 +202,17 @@ type GoSrcFile struct {
 	Path string
 }
 
-func discoverSrcFiles(moduleRootDir string) (srcFiles []GoSrcFile, err error) {
+func discoverSrcFiles(moduleRootDir string, excludeRegex []*regexp.Regexp) (srcFiles []GoSrcFile, err error) {
 	err = filepath.WalkDir(moduleRootDir, func(relativePath string, info fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
 
-		// skip vendored files
-		if strings.HasPrefix(relativePath, "vendor/") {
-			return nil
+		// skip file if exclude regex applies
+		for _, exclude := range excludeRegex {
+			if exclude.MatchString(relativePath) {
+				return nil
+			}
 		}
 
 		if !info.IsDir() && isGoSourceFile(relativePath) {
@@ -219,6 +229,18 @@ func discoverSrcFiles(moduleRootDir string) (srcFiles []GoSrcFile, err error) {
 	}
 
 	return srcFiles, nil
+}
+
+func buildRegex(regexpr []string) ([]*regexp.Regexp, error) {
+	expr := []*regexp.Regexp{}
+	for _, exclude := range regexpr {
+		r, err := regexp.Compile(exclude)
+		if err != nil {
+			return nil, errors.Wrap(err, 0)
+		}
+		expr = append(expr, r)
+	}
+	return expr, nil
 }
 
 func isGoSourceFile(path string) bool {

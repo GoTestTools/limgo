@@ -2,4 +2,5 @@
 
 /limgo
 dist/
+vendor/
 test.cov
