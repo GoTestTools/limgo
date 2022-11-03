@@ -7,11 +7,10 @@ import (
 
 	"github.com/GoTestTools/limgo/pkg/domain"
 	"github.com/GoTestTools/limgo/pkg/dto"
-	"github.com/GoTestTools/limgo/pkg/flags"
 )
 
 func main() {
-	cliFlags := flags.ParseFlags()
+	cliFlags := ParseFlags()
 
 	covFile, err := os.Open(cliFlags.CoverageFile)
 	if err != nil {
