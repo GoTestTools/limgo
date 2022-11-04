@@ -7,6 +7,7 @@ import (
 	"github.com/GoTestTools/limgo/pkg/model/gosrc"
 )
 
+//nolint:funlen
 func TestStatementIsBranchStmt(t *testing.T) {
 
 	testcases := []struct {
