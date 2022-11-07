@@ -87,25 +87,25 @@ Also, the dto directory is excluded from the statistc as well as from the covera
 {
 	"coverage": {
 		"global": {
-        "statements": 50,
-        "lines": 55,
-			  "branches": 33
-    },
-    "matcher": {
-        "pkg/coverage": {
-            "statements": 70,
-            "lines": 70,
-			      "branches": 33
+            "statements": 50,
+            "lines": 55,
+            "branches": 33
         },
-        "pkg/gosrc/g.*": {
-            "statements": 10,
-            "lines": 15,
-			      "branches": 50,
-        }
-    },
-    "excludes": [
-			"dto/.*"
-		]
+        "matcher": {
+            "pkg/coverage": {
+                "statements": 70,
+                "lines": 70,
+                "branches": 33
+            },
+            "pkg/gosrc/g.*": {
+                "statements": 10,
+                "lines": 15,
+                "branches": 50
+            }
+        },
+        "excludes": [
+            "dto/.*"
+        ]
 	},
 	"statistic": {
 		"excludes": [
