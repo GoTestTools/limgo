@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 
 	"github.com/GoTestTools/limgo/cmd/flags"
 	"github.com/GoTestTools/limgo/pkg/domain"
@@ -70,8 +71,7 @@ func getOutput(outFile string) io.Writer {
 		return os.Stdout
 	}
 
-	//nolint:gosec
-	file, err := os.Create(outFile)
+	file, err := os.Create(filepath.Clean(outFile))
 	if err != nil {
 		fmt.Printf("Failed creating/opening output file: %v\n", err)
 		return os.Stdout

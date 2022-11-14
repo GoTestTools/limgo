@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"path/filepath"
 
 	"github.com/GoTestTools/limgo/pkg/model/module"
 	"github.com/go-errors/errors"
@@ -12,8 +13,7 @@ import (
 type ModuleParser func(string, ModuleAnalyzer) (module.Module, error)
 
 var ParseModule = func(rootDir string, srcAnalyzer ModuleAnalyzer) (module.Module, error) {
-	//nolint:gosec
-	gomodFile, err := os.Open(path.Join(rootDir, "go.mod"))
+	gomodFile, err := os.Open(filepath.Clean(path.Join(rootDir, "go.mod")))
 	if err != nil {
 		return module.Module{}, errors.New(fmt.Errorf("failed opening go.mod: %w", err))
 	}
