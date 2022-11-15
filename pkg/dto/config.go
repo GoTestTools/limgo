@@ -1,5 +1,7 @@
 package dto
 
+import "io"
+
 type LimgoConfig struct {
 	CoverageConfig  `json:"coverage"`
 	StatisticConfig `json:"statistic"`
@@ -22,4 +24,46 @@ type Threshold struct {
 
 type StatisticConfig struct {
 	Excludes []string `json:"excludes"`
+}
+
+func (config LimgoConfig) ToJSON(w io.Writer) error {
+	setConfigDefaults(&config)
+	return ToJSON(config, w)
+}
+
+func ConfigFromJSONString(r io.Reader) (LimgoConfig, error) {
+	var config LimgoConfig
+	err := FromJSONString(&config, r)
+	if err != nil {
+		return LimgoConfig{}, err
+	}
+
+	setConfigDefaults(&config)
+	return config, nil
+}
+
+func setConfigDefaults(config *LimgoConfig) {
+	// exclude vendor directory by default for coverage and statistic
+	vendorExcludePattern := "vendor/.*"
+	isCoverageVendorExcluded := false
+	for _, exclude := range config.CoverageConfig.Excludes {
+		if exclude == vendorExcludePattern {
+			isCoverageVendorExcluded = true
+			break
+		}
+	}
+	if !isCoverageVendorExcluded {
+		config.CoverageConfig.Excludes = append(config.CoverageConfig.Excludes, vendorExcludePattern)
+	}
+
+	isStatisticVendorExcluded := false
+	for _, exclude := range config.StatisticConfig.Excludes {
+		if exclude == vendorExcludePattern {
+			isStatisticVendorExcluded = true
+			break
+		}
+	}
+	if !isStatisticVendorExcluded {
+		config.StatisticConfig.Excludes = append(config.StatisticConfig.Excludes, vendorExcludePattern)
+	}
 }

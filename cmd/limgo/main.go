@@ -37,7 +37,7 @@ func main() {
 	//nolint:errcheck,gosec
 	defer confFile.Close()
 
-	cfg, err := dto.FromJSONString(confFile)
+	cfg, err := dto.ConfigFromJSONString(confFile)
 	if err != nil {
 		fmt.Printf("Failed to parse config: %v\n", err)
 		os.Exit(1)
@@ -50,17 +50,15 @@ func main() {
 	}
 
 	covStatistic := domain.BuildStatementStatistic(module, pf)
-
-	printer := domain.NewPrinter(getOutput(cliFlags.OutputFile))
-	printer.PrintStatistic(*covStatistic, cliFlags.Verbosity)
-
 	covErrs, err := domain.Evaluate(*covStatistic, cfg.CoverageConfig)
 	if err != nil {
 		fmt.Printf("Failed to apply configured thresholds: %v\n", err)
 	}
 
+	printer := domain.NewPrinter(getOutput(cliFlags.OutputFile), getFormatter(cliFlags.OutputFormat))
+	printer.Print(covStatistic, covErrs, cliFlags.Verbosity)
+
 	if len(covErrs) != 0 {
-		printer.PrintCoverageError(covErrs)
 		os.Exit(1)
 	}
 	os.Exit(0)
@@ -77,4 +75,18 @@ func getOutput(outFile string) io.Writer {
 		return os.Stdout
 	}
 	return file
+}
+
+func getFormatter(outFormat string) dto.Formatter {
+	switch outFormat {
+	case "tab":
+		return dto.TabFormat
+	case "json":
+		return dto.JSONFormat
+	case "md":
+		return dto.MarkdownFormat
+	default:
+		fmt.Printf("No formatter found for '%s', falling back to '%s'", outFormat, "tab")
+		return dto.TabFormat
+	}
 }

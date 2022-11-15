@@ -9,7 +9,7 @@ import (
 	"github.com/google/go-cmp/cmp"
 )
 
-func TestToJSON_Succeeds(t *testing.T) {
+func TestConfigToJSON_Succeeds(t *testing.T) {
 	cfg := dto.LimgoConfig{
 		CoverageConfig: dto.CoverageConfig{
 			Global: &dto.Threshold{
@@ -68,7 +68,7 @@ func TestToJSON_Succeeds(t *testing.T) {
 	}
 }
 
-func TestToJSON_SucceedsSetsDefaults(t *testing.T) {
+func TestConfigToJSON_SucceedsSetsDefaults(t *testing.T) {
 	cfg := dto.LimgoConfig{
 		CoverageConfig:  dto.CoverageConfig{},
 		StatisticConfig: dto.StatisticConfig{},
@@ -99,7 +99,7 @@ func TestToJSON_SucceedsSetsDefaults(t *testing.T) {
 	}
 }
 
-func TestFromJSONString_Succeeds(t *testing.T) {
+func TestConfigFromJSONString_Succeeds(t *testing.T) {
 	rawCfg := `{
 	"coverage": {
 		"global": {
@@ -128,7 +128,7 @@ func TestFromJSONString_Succeeds(t *testing.T) {
 }
 `
 
-	parsedCfg, err := dto.FromJSONString(strings.NewReader(rawCfg))
+	parsedCfg, err := dto.ConfigFromJSONString(strings.NewReader(rawCfg))
 	if err != nil {
 		t.Fatalf("Unexpected error parsing config string to struct: %v", err)
 	}
@@ -157,10 +157,10 @@ func TestFromJSONString_Succeeds(t *testing.T) {
 	}
 }
 
-func TestFromJSONString_SucceedsSetsDefaults(t *testing.T) {
+func TestConfigFromJSONString_SucceedsSetsDefaults(t *testing.T) {
 	rawCfg := `{}`
 
-	parsedCfg, err := dto.FromJSONString(strings.NewReader(rawCfg))
+	parsedCfg, err := dto.ConfigFromJSONString(strings.NewReader(rawCfg))
 	if err != nil {
 		t.Fatalf("Unexpected error parsing config string to struct: %v", err)
 	}
@@ -190,7 +190,7 @@ func TestFromJSONString_FailsDueToInvalidJSON(t *testing.T) {
 		}
 	`
 
-	parsedCfg, err := dto.FromJSONString(strings.NewReader(cfgMissingBracket))
+	parsedCfg, err := dto.ConfigFromJSONString(strings.NewReader(cfgMissingBracket))
 	if err == nil {
 		t.Fatalf("Expected error when parsing invalid config string, but got cfg: %v", parsedCfg)
 	}

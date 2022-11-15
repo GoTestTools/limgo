@@ -2,55 +2,29 @@ package dto
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
+
+	"github.com/go-errors/errors"
 )
 
-func (config LimgoConfig) ToJSON(w io.Writer) error {
+func ToJSON(obj interface{}, w io.Writer) error {
 	encoder := json.NewEncoder(w)
 	encoder.SetIndent("", "\t")
 
-	setDefaults(&config)
-	err := encoder.Encode(config)
+	err := encoder.Encode(obj)
 	if err != nil {
-		return err
+		return errors.New(fmt.Errorf("failed to marshal to json: %w", err))
 	}
 	return nil
 }
 
-func FromJSONString(r io.Reader) (LimgoConfig, error) {
-	var config LimgoConfig
+func FromJSONString(obj interface{}, r io.Reader) error {
 	decoder := json.NewDecoder(r)
-	err := decoder.Decode(&config)
+	err := decoder.Decode(&obj)
 	if err != nil {
-		return LimgoConfig{}, err
+		return errors.New(fmt.Errorf("failed to unmarshal from string: %w", err))
 	}
 
-	setDefaults(&config)
-	return config, nil
-}
-
-func setDefaults(config *LimgoConfig) {
-	// exclude vendor directory by default for coverage and statistic
-	vendorExcludePattern := "vendor/.*"
-	isCoverageVendorExcluded := false
-	for _, exclude := range config.CoverageConfig.Excludes {
-		if exclude == vendorExcludePattern {
-			isCoverageVendorExcluded = true
-			break
-		}
-	}
-	if !isCoverageVendorExcluded {
-		config.CoverageConfig.Excludes = append(config.CoverageConfig.Excludes, vendorExcludePattern)
-	}
-
-	isStatisticVendorExcluded := false
-	for _, exclude := range config.StatisticConfig.Excludes {
-		if exclude == vendorExcludePattern {
-			isStatisticVendorExcluded = true
-			break
-		}
-	}
-	if !isStatisticVendorExcluded {
-		config.StatisticConfig.Excludes = append(config.StatisticConfig.Excludes, vendorExcludePattern)
-	}
+	return nil
 }

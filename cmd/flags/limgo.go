@@ -5,6 +5,7 @@ import "flag"
 const (
 	FlagCoverFile  string = "coverfile"
 	FlagOutFile    string = "outfile"
+	FlagOutFormat  string = "outfmt"
 	FlagConfigFile string = "config"
 	FlagVerbosity  string = "v"
 )
@@ -12,6 +13,7 @@ const (
 type Flags struct {
 	CoverageFile string
 	OutputFile   string
+	OutputFormat string
 	ConfigFile   string
 	Verbosity    uint
 }
@@ -29,6 +31,10 @@ func ParseFlags() Flags {
 		`Output file. Name of the file to write the coverage results to. If left blank, output will be printed to stdout.`,
 	)
 
+	outFormat := flag.String(FlagOutFormat, "tab",
+		`Output format. Supported values: `,
+	)
+
 	verbosity := flag.Uint(FlagVerbosity, 2,
 		`Verbosity level. Defines the depth for the output of the coverage statistic. 
 0 = No statistic output.  
@@ -44,6 +50,7 @@ func ParseFlags() Flags {
 	return Flags{
 		CoverageFile: *coverFile,
 		OutputFile:   *outFile,
+		OutputFormat: *outFormat,
 		ConfigFile:   *configFile,
 		Verbosity:    *verbosity,
 	}

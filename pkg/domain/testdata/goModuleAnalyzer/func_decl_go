@@ -1,0 +1,17 @@
+package testdata
+
+import (
+	"fmt"
+)
+
+func main() {
+	fmt.Println("Hello World")
+	DoSth()
+	DoSthElse()
+}
+
+var DoSth, DoSthElse = func() {
+	fmt.Println("This is Hello World from DoSth")
+}, func() {
+	fmt.Println("This is Hello World from DoSthElse")
+}
