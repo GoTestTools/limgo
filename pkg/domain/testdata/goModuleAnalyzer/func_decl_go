@@ -15,3 +15,6 @@ var DoSth, DoSthElse = func() {
 }, func() {
 	fmt.Println("This is Hello World from DoSthElse")
 }
+
+var Push bool
+var Build bool

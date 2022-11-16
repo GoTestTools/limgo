@@ -442,7 +442,7 @@ func TestExploreFunctions(t *testing.T) {
 			expectErr: false,
 		},
 		{
-			name: "someother",
+			name: "Successfully analyzes example with multiple variable declaration, incl. func assigment",
 			file: "func_decl_go",
 			expectFuns: []gosrc.Function{
 				{
@@ -484,6 +484,11 @@ func TestExploreFunctions(t *testing.T) {
 					},
 				},
 			},
+		},
+		{
+			name:       "Skips variable declarations with no assignment on file-level",
+			file:       "only_declaration_go",
+			expectFuns: nil,
 		},
 	}
 

@@ -8,6 +8,7 @@ import (
 	"io/fs"
 	"path/filepath"
 	"regexp"
+	"runtime/debug"
 	"strings"
 
 	"github.com/GoTestTools/limgo/pkg/model/gosrc"
@@ -28,7 +29,15 @@ func NewModuleAnalyzer(excludes []string) ModuleAnalyzer {
 			return nil, err
 		}
 
+		currentSrcFile := ""
+		defer func() {
+			if r := recover(); r != nil {
+				err = errors.New(fmt.Errorf("analyzing '%s' failed: %s\n%s", currentSrcFile, r, string(debug.Stack())))
+			}
+		}()
+
 		for _, goSrcFile := range srcFiles {
+			currentSrcFile = goSrcFile.Path
 			functions, err := ExploreFunctions(goSrcFile.Path)
 			if err != nil {
 				return nil, errors.New(fmt.Errorf("failed opening '%s': %w", goSrcFile, err))
@@ -74,8 +83,13 @@ func exploreGeneralDeclaration(genDecl *ast.GenDecl, fs *token.FileSet) []gosrc.
 		case *ast.ValueSpec:
 
 			for i := range specType.Names {
+				var value ast.Expr
+				// check if it is only declared and not assigned
+				if len(specType.Values) <= i {
+					continue
+				}
+				value = specType.Values[i]
 				name := specType.Names[i].Name
-				value := specType.Values[i]
 
 				// only add and explore if it is a function
 				if _, ok := value.(*ast.FuncLit); !ok {

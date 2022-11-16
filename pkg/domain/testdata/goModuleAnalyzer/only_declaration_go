@@ -1,0 +1,4 @@
+package testdata
+
+var Push bool
+var Build bool
