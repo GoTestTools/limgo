@@ -35,7 +35,6 @@ func TestExploreFunctions(t *testing.T) {
 			name: "Successfully analyzes hello world example",
 			file: "hello_world_go",
 			expectFuns: []gosrc.Function{
-				{Name: string(gosrc.ExprTypeGenDecl), Position: gosrc.Position{LineFrom: 3, LineTo: 5, ColumnFrom: 1, ColumnTo: 2}},
 				{
 					Name:     "main",
 					Position: gosrc.Position{LineFrom: 7, LineTo: 9, ColumnFrom: 1, ColumnTo: 2},
@@ -54,7 +53,6 @@ func TestExploreFunctions(t *testing.T) {
 			name: "Successfully analyzes hello world example with if statement",
 			file: "hello_world_with_if_go",
 			expectFuns: []gosrc.Function{
-				{Name: string(gosrc.ExprTypeGenDecl), Position: gosrc.Position{LineFrom: 3, LineTo: 6, ColumnFrom: 1, ColumnTo: 2}},
 				{
 					Name:     "main",
 					Position: gosrc.Position{LineFrom: 8, LineTo: 12, ColumnFrom: 1, ColumnTo: 2},
@@ -79,7 +77,6 @@ func TestExploreFunctions(t *testing.T) {
 			name: "Successfully analyzes hello world example with if-else statement",
 			file: "hello_world_with_if_else_go",
 			expectFuns: []gosrc.Function{
-				{Name: string(gosrc.ExprTypeGenDecl), Position: gosrc.Position{LineFrom: 3, LineTo: 6, ColumnFrom: 1, ColumnTo: 2}},
 				{
 					Name:     "main",
 					Position: gosrc.Position{LineFrom: 8, LineTo: 14, ColumnFrom: 1, ColumnTo: 2},
@@ -112,7 +109,6 @@ func TestExploreFunctions(t *testing.T) {
 			name: "Successfully analyzes hello world example with nested if statements",
 			file: "hello_world_with_nested_if_go",
 			expectFuns: []gosrc.Function{
-				{Name: string(gosrc.ExprTypeGenDecl), Position: gosrc.Position{LineFrom: 3, LineTo: 6, ColumnFrom: 1, ColumnTo: 2}},
 				{
 					Name:     "main",
 					Position: gosrc.Position{LineFrom: 8, LineTo: 27, ColumnFrom: 1, ColumnTo: 2},
@@ -199,7 +195,6 @@ func TestExploreFunctions(t *testing.T) {
 			name: "Successfully analyzes example with for statement",
 			file: "for_go",
 			expectFuns: []gosrc.Function{
-				{Name: string(gosrc.ExprTypeGenDecl), Position: gosrc.Position{LineFrom: 3, LineTo: 5, ColumnFrom: 1, ColumnTo: 2}},
 				{
 					Name:     "main",
 					Position: gosrc.Position{LineFrom: 7, LineTo: 12, ColumnFrom: 1, ColumnTo: 2},
@@ -227,7 +222,6 @@ func TestExploreFunctions(t *testing.T) {
 			name: "Successfully analyzes example with range statement",
 			file: "range_go",
 			expectFuns: []gosrc.Function{
-				{Name: string(gosrc.ExprTypeGenDecl), Position: gosrc.Position{LineFrom: 3, LineTo: 5, ColumnFrom: 1, ColumnTo: 2}},
 				{
 					Name:     "main",
 					Position: gosrc.Position{LineFrom: 7, LineTo: 12, ColumnFrom: 1, ColumnTo: 2},
@@ -255,7 +249,6 @@ func TestExploreFunctions(t *testing.T) {
 			name: "Successfully analyzes example with type switch",
 			file: "type_switch_go",
 			expectFuns: []gosrc.Function{
-				{Name: string(gosrc.ExprTypeGenDecl), Position: gosrc.Position{LineFrom: 3, LineTo: 5, ColumnFrom: 1, ColumnTo: 2}},
 				{
 					Name:     "main",
 					Position: gosrc.Position{LineFrom: 7, LineTo: 20, ColumnFrom: 1, ColumnTo: 2},
@@ -319,7 +312,6 @@ func TestExploreFunctions(t *testing.T) {
 			name: "Successfully analyzes example with switch-case",
 			file: "switch_go",
 			expectFuns: []gosrc.Function{
-				{Name: string(gosrc.ExprTypeGenDecl), Position: gosrc.Position{LineFrom: 3, LineTo: 5, ColumnFrom: 1, ColumnTo: 2}},
 				{
 					Name:     "main",
 					Position: gosrc.Position{LineFrom: 7, LineTo: 20, ColumnFrom: 1, ColumnTo: 2},
@@ -383,7 +375,6 @@ func TestExploreFunctions(t *testing.T) {
 			name: "Successfully analyzes example with defer",
 			file: "defer_go",
 			expectFuns: []gosrc.Function{
-				{Name: string(gosrc.ExprTypeGenDecl), Position: gosrc.Position{LineFrom: 3, LineTo: 5, ColumnFrom: 1, ColumnTo: 2}},
 				{
 					Name:     "main",
 					Position: gosrc.Position{LineFrom: 7, LineTo: 14, ColumnFrom: 1, ColumnTo: 2},
@@ -417,7 +408,6 @@ func TestExploreFunctions(t *testing.T) {
 			name: "Successfully analyzes example with func declaration",
 			file: "func_go",
 			expectFuns: []gosrc.Function{
-				{Name: string(gosrc.ExprTypeGenDecl), Position: gosrc.Position{LineFrom: 3, LineTo: 5, ColumnFrom: 1, ColumnTo: 2}},
 				{
 					Name:     "main",
 					Position: gosrc.Position{LineFrom: 7, LineTo: 12, ColumnFrom: 1, ColumnTo: 2},
@@ -450,6 +440,50 @@ func TestExploreFunctions(t *testing.T) {
 				},
 			},
 			expectErr: false,
+		},
+		{
+			name: "someother",
+			file: "func_decl_go",
+			expectFuns: []gosrc.Function{
+				{
+					Name:     "main",
+					Position: gosrc.Position{LineFrom: 7, LineTo: 11, ColumnFrom: 1, ColumnTo: 2},
+					Statements: []gosrc.Statement{
+						{
+							Type:     gosrc.ExprTypeExpr,
+							Position: gosrc.Position{LineFrom: 8, LineTo: 8, ColumnFrom: 2, ColumnTo: 28},
+						},
+						{
+							Type:     gosrc.ExprTypeExpr,
+							Position: gosrc.Position{LineFrom: 9, LineTo: 9, ColumnFrom: 2, ColumnTo: 9},
+						},
+						{
+							Type:     gosrc.ExprTypeExpr,
+							Position: gosrc.Position{LineFrom: 10, LineTo: 10, ColumnFrom: 2, ColumnTo: 13},
+						},
+					},
+				},
+				{
+					Name:     "DoSth",
+					Position: gosrc.Position{LineFrom: 13, LineTo: 15, ColumnFrom: 24, ColumnTo: 2},
+					Statements: []gosrc.Statement{
+						{
+							Type:     gosrc.ExprTypeExpr,
+							Position: gosrc.Position{LineFrom: 14, LineTo: 14, ColumnFrom: 2, ColumnTo: 47},
+						},
+					},
+				},
+				{
+					Name:     "DoSthElse",
+					Position: gosrc.Position{LineFrom: 15, LineTo: 17, ColumnFrom: 4, ColumnTo: 2},
+					Statements: []gosrc.Statement{
+						{
+							Type:     gosrc.ExprTypeExpr,
+							Position: gosrc.Position{LineFrom: 16, LineTo: 16, ColumnFrom: 2, ColumnTo: 51},
+						},
+					},
+				},
+			},
 		},
 	}
 

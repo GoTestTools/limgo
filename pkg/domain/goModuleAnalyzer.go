@@ -59,33 +59,45 @@ func ExploreFunctions(filePath string) (functions []gosrc.Function, err error) {
 		case *ast.FuncDecl:
 			functions = append(functions, exploreFunction(declType, fs))
 		case *ast.GenDecl:
-			functions = append(functions, exploreGeneralDeclaration(declType, fs))
+			functions = append(functions, exploreGeneralDeclaration(declType, fs)...)
 		default:
 		}
 	}
 	return functions, nil
 }
 
-func exploreGeneralDeclaration(genDecl *ast.GenDecl, fs *token.FileSet) gosrc.Function {
-	from := fs.File(genDecl.Pos()).Position(genDecl.Pos())
-	to := fs.File(genDecl.End()).Position(genDecl.End())
-
-	function := gosrc.Function{
-		Name:     string(gosrc.ExprTypeGenDecl),
-		Position: gosrc.NewPosition(from, to),
-	}
+func exploreGeneralDeclaration(genDecl *ast.GenDecl, fs *token.FileSet) []gosrc.Function {
+	functions := []gosrc.Function{}
 
 	for _, spec := range genDecl.Specs {
 		switch specType := spec.(type) {
 		case *ast.ValueSpec:
-			for _, value := range specType.Values {
+
+			for i := range specType.Names {
+				name := specType.Names[i].Name
+				value := specType.Values[i]
+
+				// only add and explore if it is a function
+				if _, ok := value.(*ast.FuncLit); !ok {
+					continue
+				}
+
+				from := fs.File(value.Pos()).Position(value.Pos())
+				to := fs.File(value.End()).Position(value.End())
+
+				function := gosrc.Function{
+					Name:     name,
+					Position: gosrc.NewPosition(from, to),
+				}
+
 				function.Statements = append(function.Statements, exploreExpression(value, nil, fs)...)
+				functions = append(functions, function)
 			}
 		default:
 		}
 	}
 
-	return function
+	return functions
 }
 
 func exploreFunction(toExplore *ast.FuncDecl, fs *token.FileSet) gosrc.Function {
