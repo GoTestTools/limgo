@@ -67,6 +67,17 @@ An overview as well as a short description of all supported flags can be display
 limgo -help
 ```
 
+### Output format
+
+By default, `limgo` will output the statistic and the list of failed coverage thresholds in a tabular format (as seen above). Further, currently implemented, formats include
+```bash
+# JSON
+limgo -coverfile=cov.out -outfmt=json
+
+# Markdown
+limgo -coverfile=cov.out -outfmt=md
+```
+
 ### The configuration file
 
 Coverage thresholds as well as statistic configuration can be defined in a configuration file. By default, `limgo` will search for a file named `.limgo.json`. This can be overridden by the `-config` flag. 
