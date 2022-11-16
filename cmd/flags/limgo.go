@@ -32,7 +32,7 @@ func ParseFlags() Flags {
 	)
 
 	outFormat := flag.String(FlagOutFormat, "tab",
-		`Output format. Supported values: `,
+		`Output format. Supported values: tab, json, md.`,
 	)
 
 	verbosity := flag.Uint(FlagVerbosity, 2,
