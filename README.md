@@ -6,6 +6,7 @@
     <a href="https://github.com/GoTestTools/limgo/releases/latest"><img alt="GitHub release" src="https://img.shields.io/github/release/GoTestTools/limgo.svg?logo=github&"></a>
     <a href="http://unlicense.org/"><img alt="unlicense" src="https://img.shields.io/badge/license-Unlicense-blue.svg"></a>
     <a href="https://github.com/GoTestTools/limgo/actions/workflows/test.yml"><img alt="Test" src="https://github.com/GoTestTools/limgo/actions/workflows/test.yml/badge.svg?branch=main"></a>
+    <img src="https://github.com/GoTestTools/limgo/blob/limgo-badge/limgo-badge.png?raw=true" alt="test coverge" />
   </p>
 </p>
 
