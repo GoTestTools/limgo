@@ -4,3 +4,4 @@
 dist/
 vendor/
 test.cov
+test.out

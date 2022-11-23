@@ -21,7 +21,7 @@ jobs:
         run: make test-cov
       - name: Generate test badge
         if: github.ref == 'refs/heads/main'
-        uses: GoTestTools/limgo-badge-action@59ae101a9b238e0c096aacc9480bb6eb3b8d4cb6
+        uses: GoTestTools/limgo-badge-action@0890ac43873ffd51a10f25c6b6413a9c7fffc06d
         with:
           limgo_file: test.out
           limgo_file_format: tab
