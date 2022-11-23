@@ -1,9 +1,11 @@
 name: Test
 on:
-  workflow_run:
-    workflows: [Lint]
-    types:
-      - completed
+  push:
+    branches:
+      - "**"
+    tags-ignore:
+      - "v**"
+  pull_request:
 jobs:
   test:
     name: go test
@@ -16,4 +18,15 @@ jobs:
         with:
           go-version: 1.19
       - name: Run go test
-        run: make test-cov 
+        run: make test-cov
+      - name: Generate test badge
+        if: github.ref == 'refs/heads/main'
+        uses: GoTestTools/limgo-badge-action@59ae101a9b238e0c096aacc9480bb6eb3b8d4cb6
+        with:
+          limgo_file: test.out
+          limgo_file_format: tab
+          badge_name: limgo-badge.png
+          repo: github.com/gotesttools/limgo
+          branch: limgo-badge
+          github_token: ${{ secrets.GH_TOKEN }}
+          github_token_owner: engelmi
