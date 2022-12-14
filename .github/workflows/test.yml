@@ -21,12 +21,12 @@ jobs:
         run: make test-cov
       - name: Generate test badge
         if: github.ref == 'refs/heads/main'
-        uses: GoTestTools/limgo-badge-action@0890ac43873ffd51a10f25c6b6413a9c7fffc06d
+        uses: GoTestTools/limgo-badge-action@v1.0.1
         with:
           limgo_file: test.out
           limgo_file_format: tab
           badge_name: limgo-badge.png
-          repo: github.com/gotesttools/limgo
+          repo: github.com/GoTestTools/limgo
           branch: limgo-badge
           github_token: ${{ secrets.GH_TOKEN }}
           github_token_owner: engelmi
