@@ -176,3 +176,7 @@ jobs:
 ```
 
 The repository [limgo-action-example](https://github.com/GoTestTools/limgo-action-example) contains an example on how to use the `limgo` GitHub Action.  
+
+## Generating a badge
+
+For generating a custom badge that visualizes the test coverage and if it meets the specified thresholds, please refer to the [limgo-badge-action](https://github.com/GoTestTools/limgo-badge-action). 
